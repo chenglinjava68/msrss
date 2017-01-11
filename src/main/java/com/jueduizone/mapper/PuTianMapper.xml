@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jueduizone.dao.PuTianDao">
+    <resultMap id="putianMap" type="PuTian">
+        <id property="id" column="id"/>
+        <result property="ptName" column="pt_Name"/>
+        <result property="ptAddress" column="pt_Addree"/>
+        <result property="ptPhone" column="pt_Phone"/>
+        <result property="ptWebUrl" column="pt_WebUrl"/>
+        <result property="ptComment" column="pt_Comment"/>
+        <result property="ptState" column="pt_State"/>
+        <result property="ptCreateTime" column="pt_CreateTime"/>
+    </resultMap>
+    <!--根据名称模糊查询-->
+    <select id="selectInfoByName" resultMap="putianMap">
+		select * from t_putian where pt_Name like concat(concat('%',#{name}),'%')
+        <if test="state != null and state != ''">
+            and pt_State = #{state}
+        </if>
+	</select>
+    <!--根据ID查询-->
+    <select id="selectInfoById" resultMap="putianMap">
+        select * from t_putian where id = #{id}
+        <if test="state != null and state != ''">
+          and pt_State = #{state}
+        </if>
+    </select>
+
+    <!-- 增加信息 -->
+    <insert id="insertInfo" parameterType="PuTian">
+        INSERT ignore INTO t_putian (
+            pt_Addree,
+            pt_Name,
+            pt_Phone,
+            pt_Comment,
+            pt_WebUrl,
+            pt_State
+            )
+        VALUES
+        (
+            #{ptAddress},
+            #{ptName},
+            #{ptPhone},
+            #{ptComment},
+            #{ptWebUrl},
+            '0'
+        )
+    </insert>
+</mapper>
